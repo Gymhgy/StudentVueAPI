@@ -17,9 +17,23 @@ namespace StudentVueAPI {
         private HttpClient client;
         private CookieContainer cc = new CookieContainer();
 
-        public async Task L() {
+        private static Dictionary<string, string> urlMappings = new Dictionary<string, string>()
+        {
+            ["Gradebook"] = "PXP2_Gradebook.aspx",
+            ["Student Info"] = "PXP2_Student.aspx"
+        };
 
+        private string GetRaw(string url) {
+            return client.GetStringAsync(url).Result;
         }
+
+        private HtmlDocument GetResource(string url) {
+            var doc = new HtmlDocument();
+            doc.LoadHtml(GetRaw(url));
+            return doc;
+        }
+
+
 
         public StudentVue(string username, string password, string domain) {
             this.domain = domain;
@@ -48,7 +62,7 @@ namespace StudentVueAPI {
             HttpClientHandler handler = new HttpClientHandler();
             handler.CookieContainer = cc;
             client = new HttpClient(handler);
-            client.BaseAddress = new Uri($"https://{domain}");
+            client.BaseAddress = new Uri($"https://{domain}/");
             
 
             //Non-Selenium (Doesn't work)
@@ -77,10 +91,12 @@ namespace StudentVueAPI {
 
 
 
-        public void GetGradeBook() {
+        public string GetGradebookRaw() {
+            return GetRaw(urlMappings["Gradebook"]);
+        }
 
-
-
+        public string GetStudentInfoRaw() {
+            return GetRaw(urlMappings["StudentInfo"]);
         }
 
 
