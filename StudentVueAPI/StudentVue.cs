@@ -18,29 +18,28 @@ namespace StudentVueAPI {
 
         private readonly HttpClient client;
 
-        const string WEBSERVICE_HANDLE_NAME = "PXPWebServices";
-
         public StudentVue(string username, string password, string domain) {
             this.domain = domain;
             this.username = username;
             this.password = password;
 
-            CookieContainer cookies = new CookieContainer();
-            HttpClientHandler handler = new HttpClientHandler();
-            handler.CookieContainer = cookies;
+            CookieContainer cookies = new();
+            HttpClientHandler handler = new() {
+                CookieContainer = cookies
+            };
 
             client = new HttpClient(handler);
-            var z = client.GetAsync("https://portal.sfusd.edu/Service/PXPCommunication.asmx?WSDL").Result;
+            _ = client.GetAsync($"https://{domain}/Service/PXPCommunication.asmx?WSDL").Result;
 
 
         }
 
-        public StudentInfo GetStudentInfo() {
-            return null;
+        public async Task<StudentInfo> GetStudentInfoAsync() {
+            return await SendRequestAsync<StudentInfo>("StudentInfo", "");
         }
 
         private async Task<T> SendRequestAsync<T>(string method, string parms) {
-            using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, "https://portal.sfusd.edu/Service/PXPCommunication.asmx")) {
+            using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, $"https://{domain}/Service/PXPCommunication.asmx")) {
                 requestMessage.Headers.Add("SOAPAction", "\"http://edupoint.com/webservices/ProcessWebServiceRequest\"");
                 requestMessage.Content = new StringContent(
                     "<soap-env:Envelope xmlns:soap-env=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap-env:Body><ns0:ProcessWebServiceRequest xmlns:ns0=\"http://edupoint.com/webservices/\">" +
@@ -55,12 +54,12 @@ namespace StudentVueAPI {
                     null, "text/xml");
                 var response = await client.SendAsync(requestMessage);
                 var responseXml = XDocument.Parse(await response.Content.ReadAsStringAsync());
-                var xml = responseXml.Descendants("ProcessWebServiceRequestResult").First().Value.Replace("&gt;", ">").Replace("&lt;", "<");
+                XNamespace xmlns = "http://edupoint.com/webservices/";
+                var xml = responseXml.Descendants(xmlns + "ProcessWebServiceRequestResult").First().Value.Replace("<br>", "&#xA;");
 
                 var serializer = new XmlSerializer(typeof(T));
-                using (TextReader reader = new StringReader(xml)) {
-                    return (T)serializer.Deserialize(reader);
-                }
+                using TextReader reader = new StringReader(xml);
+                return (T)serializer.Deserialize(reader);
             }
 
             throw new NotImplementedException();

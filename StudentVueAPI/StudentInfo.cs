@@ -3,63 +3,260 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HtmlAgilityPack;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Reflection;
-using StudentVueAPI.JsonConverters;
 
 namespace StudentVueAPI {
 
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
 
-    public class StudentInfo {
 
-        public StudentInfo(string name, int studentNumber, string gender, int grade, string schoolName, DateTime birthdate) {
-            Name = name;
-            StudentNumber = studentNumber;
-            Gender = gender;
-            Grade = grade;
-            SchoolName = schoolName;
-            Birthdate = birthdate;
-        }
+    // NOTE: Generated code may require at least .NET Framework 4.5 or .NET Core/Standard 2.0.
+    /// <remarks/>
+    [System.Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
+    [System.Xml.Serialization.XmlRoot(Namespace = "", IsNullable = false)]
+    public partial class StudentInfo {
 
-        static StudentInfo() {
-            Properties = typeof(StudentInfo).GetProperties().Select(p => {
-                JsonPropertyNameAttribute[] attr = (JsonPropertyNameAttribute[])p.GetCustomAttributes<JsonPropertyNameAttribute>();
-                if (attr.Length > 0) return attr[0].Name;
-                else return p.Name;
-            });
-            Console.WriteLine(string.Join(", ", Properties));
-        }
-        internal static readonly IEnumerable<string> Properties;
-        [JsonPropertyName("Student Name")]
-        public string Name { get; }
-        [JsonPropertyName("Student No")]
-        public int StudentNumber { get; }
-        public string Gender { get; }
-        public int Grade { get; }
-        [JsonPropertyName("School Name")]
-        public string SchoolName { get; }
-        [JsonConverter(typeof(DateTimeParseConverter))]
-        [JsonPropertyName("Birth Date")]
-        public DateTime Birthdate { get; }
-        [JsonExtensionData]
+        /// <remarks/>
+        public object LockerInfoRecords { get; set; }
 
-        public readonly Dictionary<string, string> OtherData;
+        /// <remarks/>
+        public string FormattedName { get; set; }
 
-        internal static StudentInfo FromHtml(HtmlDocument doc) {
-            //get the second one
-            //change if need to get info beyond 1st table
-            HtmlNode table = doc.DocumentNode.SelectSingleNode("(//table[@class='info_tbl table table-bordered'])[2]");
-            var nodes = table.SelectNodes(".//td");
-            var dict = new Dictionary<string, string>();
-            foreach(var node in nodes) {
-                var key = node.SelectSingleNode(".//span").InnerText;
-                var value = node.GetDirectInnerText();
-                dict.Add(key, value);
-            }
-            return JsonSerializer.Deserialize<StudentInfo>(JsonSerializer.Serialize(dict));
-        }
+        /// <remarks/>
+        public uint PermID { get; set; }
+
+        /// <remarks/>
+        public string Gender { get; set; }
+
+        /// <remarks/>
+        public byte Grade { get; set; }
+
+        /// <remarks/>
+        public string Address { get; set; }
+
+        /// <remarks/>
+        public object LastNameGoesBy { get; set; }
+
+        /// <remarks/>
+        public object NickName { get; set; }
+
+        /// <remarks/>
+        public string BirthDate { get; set; }
+
+        /// <remarks/>
+        public string EMail { get; set; }
+
+        /// <remarks/>
+        public string Phone { get; set; }
+
+        /// <remarks/>
+        public object HomeLanguage { get; set; }
+
+        /// <remarks/>
+        public string CurrentSchool { get; set; }
+
+        /// <remarks/>
+        public object Track { get; set; }
+
+        /// <remarks/>
+        public string HomeRoomTch { get; set; }
+
+        /// <remarks/>
+        public string HomeRoomTchEMail { get; set; }
+
+        /// <remarks/>
+        public string HomeRoomTchStaffGU { get; set; }
+
+        /// <remarks/>
+        public string OrgYearGU { get; set; }
+
+        /// <remarks/>
+        public string HomeRoom { get; set; }
+
+        /// <remarks/>
+        public string CounselorName { get; set; }
+
+        /// <remarks/>
+        public string CounselorEmail { get; set; }
+
+        /// <remarks/>
+        public string CounselorStaffGU { get; set; }
+
+        /// <remarks/>
+        public string Photo { get; set; }
+
+        /// <remarks/>
+        public StudentInfoEmergencyContacts EmergencyContacts { get; set; }
+
+        /// <remarks/>
+        public StudentInfoPhysician Physician { get; set; }
+
+        /// <remarks/>
+        public StudentInfoDentist Dentist { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlArrayItem("UserDefinedGroupBox", IsNullable = false)]
+        public StudentInfoUserDefinedGroupBox[] UserDefinedGroupBoxes { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string Type { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public bool ShowPhysicianAndDentistInfo { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public bool ShowStudentInfo { get; set; }
+    }
+
+    /// <remarks/>
+    [System.Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
+    public partial class StudentInfoEmergencyContacts {
+
+        /// <remarks/>
+        public StudentInfoEmergencyContactsEmergencyContact EmergencyContact { get; set; }
+    }
+
+    /// <remarks/>
+    [System.Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
+    public partial class StudentInfoEmergencyContactsEmergencyContact {  
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string Name { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string Relationship { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string HomePhone { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string WorkPhone { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string OtherPhone { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string MobilePhone { get; set; }
+    }
+
+    /// <remarks/>
+    [System.Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
+    public partial class StudentInfoPhysician {   
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string Name { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string Hospital { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string Phone { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string Extn { get; set; }
+    }
+
+    /// <remarks/>
+    [System.Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
+    public partial class StudentInfoDentist {
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string Name { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string Office { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string Phone { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string Extn { get; set; }
+    }
+
+    /// <remarks/>
+    [System.Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
+    public partial class StudentInfoUserDefinedGroupBox { 
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlArrayItem("UserDefinedItem", IsNullable = false)]
+        public StudentInfoUserDefinedGroupBoxUserDefinedItem[] UserDefinedItems { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string GroupBoxLabel { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string GroupBoxID { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string VCID { get; set; }
+    }
+
+    /// <remarks/>
+    [System.Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
+    public partial class StudentInfoUserDefinedGroupBoxUserDefinedItem {
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string ItemLabel { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string ItemType { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string SourceObject { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string SourceElement { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string VCID { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string Value { get; set; }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string Rev_Text { get; set; }
     }
 }
