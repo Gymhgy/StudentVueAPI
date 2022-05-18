@@ -30,15 +30,32 @@ namespace StudentVueAPI {
 
             client = new HttpClient(handler);
             _ = client.GetAsync($"https://{domain}/Service/PXPCommunication.asmx?WSDL").Result;
-
-
         }
 
         public async Task<StudentInfo> GetStudentInfoAsync() {
             return await SendRequestAsync<StudentInfo>("StudentInfo", "");
         }
+        public async Task<Gradebook> GetGradebookAsync(int? reportPeriod = null) {
+            return await SendRequestAsync<Gradebook>("Gradebook", 
+                reportPeriod?.ToString() ?? $"<ReportPeriod>{reportPeriod}</ReportPeriod>");
+        }
+        public async Task<StudentSchoolInfoListing> GetStudentSchoolInfoListingAsync() {
+            return await SendRequestAsync<StudentSchoolInfoListing>("StudentSchoolInfo", "");
+        }
+        public async Task<StudentClassSchedule> GetStudentClassScheduleAsync(int? termIndex = null) {
+            return await SendRequestAsync<StudentClassSchedule>("StudentClassList",
+                termIndex?.ToString() ?? $"<TermIndex>{termIndex}</TermIndex>");
+        }
 
+        public async Task<RCReportingPeriod> GetRCReportingPeriodAsync() {
+            return await SendRequestAsync<RCReportingPeriod>("GetReportCardInitialData", "");
+        }
+
+        private bool l => username is not null;
         private async Task<T> SendRequestAsync<T>(string method, string parms) {
+            if(method is not null) {
+
+            }
             using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, $"https://{domain}/Service/PXPCommunication.asmx")) {
                 requestMessage.Headers.Add("SOAPAction", "\"http://edupoint.com/webservices/ProcessWebServiceRequest\"");
                 requestMessage.Content = new StringContent(
